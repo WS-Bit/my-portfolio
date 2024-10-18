@@ -14,7 +14,6 @@ Welcome to my portfolio! This repository showcases my work, projects, and skills
 - CSS
 - JavaScript
 - React
-- [Other technologies you use]
 
 ## Getting Started
 
