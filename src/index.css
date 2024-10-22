@@ -1,0 +1,17 @@
+.window-body {
+    font-size: 18px;
+    /* Increase text size in content */
+    line-height: 1.5;
+}
+
+.window-body h4 {
+    font-size: 22px;
+    /* Increase title size */
+    font-weight: bold;
+}
+
+.window-body .project-title {
+    font-size: 24px;
+    /* Project title size */
+    font-weight: bold;
+}

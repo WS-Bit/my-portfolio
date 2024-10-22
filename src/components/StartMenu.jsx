@@ -9,7 +9,7 @@ const StartMenu = ({ onClose }) => {
                 label="About Me"
                 onClick={() => {
                     console.log('Open About Me');
-                    onClose(); // Close menu after clicking
+                    onClose();
                 }}
             />
             <Icon
@@ -17,7 +17,7 @@ const StartMenu = ({ onClose }) => {
                 label="Projects"
                 onClick={() => {
                     console.log('Open Projects');
-                    onClose(); // Close menu after clicking
+                    onClose();
                 }}
             />
             <Icon
@@ -25,7 +25,7 @@ const StartMenu = ({ onClose }) => {
                 label="Contact"
                 onClick={() => {
                     console.log('Open Contact');
-                    onClose(); // Close menu after clicking
+                    onClose();
                 }}
             />
             {/* Add more icons as needed */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import StartMenu from './StartMenu'; // Import the StartMenu component
+import StartMenu from './StartMenu';
 
 const Taskbar = () => {
     const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
@@ -12,8 +12,8 @@ const Taskbar = () => {
         };
 
         updateTime();
-        const intervalId = setInterval(updateTime, 60000); // Update every minute
-        return () => clearInterval(intervalId); // Cleanup on unmount
+        const intervalId = setInterval(updateTime, 60000);
+        return () => clearInterval(intervalId); 
     }, []);
 
     const toggleStartMenu = () => {
