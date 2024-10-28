@@ -7,7 +7,6 @@ import Icon from './components/Icon';
 import { AboutMe, Projects, Contact } from './components/WindowContents';
 import '98.css';
 
-
 const App = () => {
   const [openWindows, setOpenWindows] = useState([]);
 
@@ -18,7 +17,6 @@ const App = () => {
   };
 
   const handleOpenWindow = (title) => {
-    // Check if window is already open
     if (!openWindows.some(window => window.title === title)) {
       setOpenWindows((prev) => [...prev, { title, id: Date.now() }]);
     }
@@ -29,7 +27,7 @@ const App = () => {
   };
 
   return (
-    <div className="win98-portfolio">
+    <div className="win98-portfolio" style={{ height: '100vh', width: '100vw', position: 'relative' }}>
       <Desktop>
         <Icon
           icon="mycomputer"

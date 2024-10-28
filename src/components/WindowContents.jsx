@@ -1,18 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const AboutMe = () => {
+    const [isPixelated, setIsPixelated] = useState(true);
+
+    const togglePixelation = () => {
+        setIsPixelated(!isPixelated);
+    };
+
+    // Use a tiny version of the image for pixelated state
+    const imageUrl = isPixelated
+        ? "src/assets/me-tiny.jpg"  // This should be a 16x16 or 32x32 version of your image
+        : "src/assets/me.jpg";      // Original high-res image
+
     return (
         <div className="p-4">
-            <h4 className="text-xl font-bold mb-4">About Me</h4><br />
+            <h4 className="text-xl font-bold mb-4">About Me</h4>
             <div className="space-y-4">
-                <p>Hello! I'm Will Sexton, a junior software engineer, passionate about code, infrastructure and design!</p><br />
-                <div className="bg-gray-100 p-4 rounded">
-                    <h4 className="font-bold mb-2">Skills</h4><br />
-                    <ul className="list-disc pl-4">
-                        <li>Knowledge in JavaScript, TypeScript and Python</li><br />
-                        <li>React & Frontend Development</li><br />
-                        <li>UI/UX Design</li><br />
-                        <li>Backend Development using Python Django and Typescript with Express</li><br />
+                <div className="profile-image-container">
+                    <img
+                        src={imageUrl}
+                        alt="Profile"
+                        className={isPixelated ? 'image-pixelated' : 'image-clear'}
+                        onClick={togglePixelation}
+                    />
+                    <button onClick={togglePixelation}>
+                        {isPixelated ? 'Click to enhance' : 'Click to pixelate'}
+                    </button>
+                </div><br/>
+                <p className="text-lg">Hello! I'm Will Sexton, a junior software engineer, passionate about code, infrastructure and design!</p>
+                <div className="bg-gray-100 p-4 rounded window-style">
+                    <h4 className="font-bold mb-2">Skills</h4>
+                    <ul className="list-disc pl-4 space-y-2">
+                        <p>Knowledge in JavaScript, TypeScript and Python</p>
+                        <p>React & Frontend Development</p>
+                        <p>UI/UX Design</p>
+                        <p>Backend Development using Python Django and Typescript with Express</p>
                     </ul>
                 </div>
             </div>
@@ -58,27 +80,19 @@ const Projects = () => {
                     }
                 ].map((project, index) => (
                     <div key={index} className="border p-3 rounded">
-                        <a
-                            href={project.deployedUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="project-title text-blue-600 hover:underline block mb-3"
-                        >
+                        <h3 className="project-title text-blue-600 block mb-3">
                             {project.title}
-                        </a>
-                        <div className="flex gap-2 mb-3">
-                            <button
-                                onClick={() => window.open(project.frontendUrl, '_blank')}
-                                className="px-4 py-2 bg-gray-200 border-2 border-gray-400 rounded shadow-sm hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
-                            >
-                                Frontend Repository
+                        </h3>
+                        <div className="project-buttons">
+                            <button onClick={() => window.open(project.deployedUrl, '_blank')}>
+                                View Project
+                            </button>
+                            <button onClick={() => window.open(project.frontendUrl, '_blank')}>
+                                View Frontend
                             </button>
                             {project.backendUrl && (
-                                <button
-                                    onClick={() => window.open(project.backendUrl, '_blank')}
-                                    className="px-4 py-2 bg-gray-200 border-2 border-gray-400 rounded shadow-sm hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
-                                >
-                                    Backend Repository
+                                <button onClick={() => window.open(project.backendUrl, '_blank')}>
+                                    View Backend
                                 </button>
                             )}
                         </div>
@@ -104,31 +118,66 @@ const Contact = () => {
         window.open('https://www.linkedin.com/in/william-sexton-861a88154/', '_blank');
     };
 
+    const buttonStyle = {
+        width: '280px',
+        height: '40px',
+        marginBottom: '15px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '16px'
+    };
+
+    const iconStyle = {
+        width: '24px',
+        height: '24px',
+        marginRight: '10px'
+    };
+
     return (
-        <div className="p-4">
-            <h4 className="text-xl font-bold mb-4">Contact Me</h4><br />
-            <div className="space-y-4">
-                <div className="flex items-center space-x-2">
-                    <button
-                        onClick={handleEmailClick}
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                        Email Me
-                    </button>
-                </div><br />
-                <div className="flex items-center space-x-2">
-                    <button
-                        onClick={handleGitHubClick}
-                        className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800">
-                        GitHub
-                    </button>
-                </div><br />
-                <div className="flex items-center space-x-2">
-                    <button
-                        onClick={handleLinkedInClick}
-                        className="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800">
-                        LinkedIn
-                    </button>
-                </div><br />
+        <div className="window-body">
+            <h4 style={{ textAlign: 'center', marginBottom: '20px' }}>Contact Me</h4>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: '20px'
+            }}>
+                <button
+                    onClick={handleEmailClick}
+                    style={buttonStyle}
+                >
+                    <img
+                        src="/icons/email.png"
+                        alt="Email"
+                        style={iconStyle}
+                    />
+                    Email Me
+                </button>
+
+                <button
+                    onClick={handleGitHubClick}
+                    style={buttonStyle}
+                >
+                    <img
+                        src="/icons/github.png"
+                        alt="GitHub"
+                        style={iconStyle}
+                    />
+                    GitHub
+                </button>
+
+                <button
+                    onClick={handleLinkedInClick}
+                    style={buttonStyle}
+                >
+                    <img
+                        src="/icons/linkedin.png"
+                        alt="LinkedIn"
+                        style={iconStyle}
+                    />
+                    LinkedIn
+                </button>
             </div>
         </div>
     );

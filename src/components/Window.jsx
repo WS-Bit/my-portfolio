@@ -1,25 +1,34 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import Draggable from 'react-draggable';
-import '98.css'; // Importing 98.css styles
-
-let highestZIndex = 1; // Global variable to track the highest z-index
+import '98.css';
 
 const Window = ({ title, children, onClose }) => {
     const [size, setSize] = useState({ width: 600, height: 500 });
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [zIndex, setZIndex] = useState(0); // Start z-index at 0
     const [isResizing, setIsResizing] = useState(false);
     const [initialMousePosition, setInitialMousePosition] = useState({ x: 0, y: 0 });
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [zIndex, setZIndex] = useState(1);
+    const nodeRef = useRef(null);
 
-    useEffect(() => {
-        bringToFront(); // Set z-index when component mounts
-    }, []);
+    // Calculate a random position within a reasonable area of the screen
+    const getInitialPosition = () => {
+        const maxOffset = 100; // Maximum random offset
+        const baseX = 50; // Base X position from left
+        const baseY = 50; // Base Y position from top
+
+        return {
+            x: baseX + Math.random() * maxOffset,
+            y: baseY + Math.random() * maxOffset
+        };
+    };
 
     const startResize = useCallback((e) => {
-        setIsResizing(true);
-        setInitialMousePosition({ x: e.clientX, y: e.clientY });
-        e.preventDefault();
-    }, []);
+        if (!isMobile) {
+            setIsResizing(true);
+            setInitialMousePosition({ x: e.clientX, y: e.clientY });
+            e.preventDefault();
+        }
+    }, [isMobile]);
 
     const stopResize = useCallback(() => {
         setIsResizing(false);
@@ -27,7 +36,7 @@ const Window = ({ title, children, onClose }) => {
 
     const resize = useCallback(
         (e) => {
-            if (isResizing) {
+            if (isResizing && !isMobile) {
                 const newWidth = size.width + (e.clientX - initialMousePosition.x);
                 const newHeight = size.height + (e.clientY - initialMousePosition.y);
                 setSize({
@@ -37,16 +46,13 @@ const Window = ({ title, children, onClose }) => {
                 setInitialMousePosition({ x: e.clientX, y: e.clientY });
             }
         },
-        [isResizing, size.width, size.height, initialMousePosition]
+        [isResizing, size.width, size.height, initialMousePosition, isMobile]
     );
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (isResizing) {
             window.addEventListener('mousemove', resize);
             window.addEventListener('mouseup', stopResize);
-        } else {
-            window.removeEventListener('mousemove', resize);
-            window.removeEventListener('mouseup', stopResize);
         }
         return () => {
             window.removeEventListener('mousemove', resize);
@@ -54,26 +60,34 @@ const Window = ({ title, children, onClose }) => {
         };
     }, [isResizing, resize, stopResize]);
 
-    const handleDrag = (e, data) => {
-        setPosition({ x: data.x, y: data.y });
-    };
-
-    const bringToFront = () => {
-        highestZIndex += 1; // Increment the global z-index counter
-        setZIndex(highestZIndex); // Update the window's z-index
-    };
+    const bringToFront = useCallback(() => {
+        const allWindows = document.querySelectorAll('.window');
+        let maxZ = 0;
+        allWindows.forEach(win => {
+            const z = parseInt(win.style.zIndex || '0');
+            maxZ = Math.max(maxZ, z);
+        });
+        setZIndex(maxZ + 1);
+    }, []);
 
     return (
-        <Draggable handle=".title-bar" bounds="parent" position={position} onDrag={handleDrag}>
+        <Draggable
+            nodeRef={nodeRef}
+            handle=".title-bar"
+            defaultPosition={getInitialPosition()}
+            onStart={bringToFront}
+            bounds=".desktop"
+        >
             <div
+                ref={nodeRef}
                 className="window"
                 style={{
-                    width: `${size.width}px`,
-                    height: `${size.height}px`,
-                    zIndex: zIndex, // Apply the z-index
-                    position: 'absolute'
+                    width: isMobile ? '90vw' : `${size.width}px`,
+                    height: isMobile ? '80vh' : `${size.height}px`,
+                    position: 'absolute',
+                    zIndex: zIndex,
                 }}
-                onMouseDown={bringToFront} // Bring the window to the front on click
+                onMouseDown={bringToFront}
             >
                 <div className="title-bar">
                     <div className="title-bar-text">{title}</div>
@@ -85,13 +99,14 @@ const Window = ({ title, children, onClose }) => {
                     className="window-body"
                     style={{
                         overflow: 'auto',
-                        padding: '10px',
-                        height: 'calc(100% - 30px)'
+                        padding: '15px',
+                        height: 'calc(100% - 30px)',
+                        fontSize: isMobile ? '16px' : '18px'
                     }}
                 >
                     {children}
                 </div>
-                <div className="resizer" onMouseDown={startResize} />
+                {!isMobile && <div className="resizer" onMouseDown={startResize} />}
             </div>
         </Draggable>
     );
