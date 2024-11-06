@@ -12,9 +12,9 @@ const Window = ({ title, children, onClose }) => {
 
     // Calculate a random position within a reasonable area of the screen
     const getInitialPosition = () => {
-        const maxOffset = 100; // Maximum random offset
-        const baseX = 50; // Base X position from left
-        const baseY = 50; // Base Y position from top
+        const maxOffset = 300; // Maximum random offset
+        const baseX = 40; // Base X position from left
+        const baseY = -60; // Base Y position from top
 
         return {
             x: baseX + Math.random() * maxOffset,

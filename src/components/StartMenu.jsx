@@ -1,12 +1,12 @@
 import React from 'react';
 
-const StartMenu = ({ onClose }) => {
+const StartMenu = ({ onClose, handleOpenWindow }) => {
     const menuItems = [
         {
             icon: 'mycomputer',
             label: 'About Me',
             onClick: () => {
-                console.log('Open About Me');
+                handleOpenWindow('About Me');
                 onClose();
             }
         },
@@ -14,7 +14,7 @@ const StartMenu = ({ onClose }) => {
             icon: 'folder',
             label: 'Projects',
             onClick: () => {
-                console.log('Open Projects');
+                handleOpenWindow('Projects');
                 onClose();
             }
         },
@@ -22,7 +22,7 @@ const StartMenu = ({ onClose }) => {
             icon: 'msie',
             label: 'Contact',
             onClick: () => {
-                console.log('Open Contact');
+                handleOpenWindow('Contact');
                 onClose();
             }
         }

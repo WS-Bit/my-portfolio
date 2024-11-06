@@ -55,7 +55,7 @@ const App = () => {
           </Window>
         ))}
       </Desktop>
-      <Taskbar />
+      <Taskbar handleOpenWindow={handleOpenWindow} />
     </div>
   );
 };

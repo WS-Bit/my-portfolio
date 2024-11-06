@@ -11,7 +11,6 @@ const TaskbarClock = () => {
             setDateTime(new Date());
         }, 1000);
 
-        // Click outside handler
         const handleClickOutside = (event) => {
             if (clockRef.current && !clockRef.current.contains(event.target)) {
                 setShowDatePopup(false);
@@ -68,7 +67,7 @@ const TaskbarClock = () => {
     );
 };
 
-const Taskbar = () => {
+const Taskbar = ({ handleOpenWindow }) => {
     const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
 
     const toggleStartMenu = () => {
@@ -91,7 +90,12 @@ const Taskbar = () => {
                 />
                 Start
             </div>
-            {isStartMenuOpen && <StartMenu onClose={toggleStartMenu} />}
+            {isStartMenuOpen && (
+                <StartMenu
+                    onClose={toggleStartMenu}
+                    handleOpenWindow={handleOpenWindow}
+                />
+            )}
             <div className="taskbar-middle"></div>
             <TaskbarClock />
         </div>

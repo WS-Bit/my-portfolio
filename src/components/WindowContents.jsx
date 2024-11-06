@@ -9,8 +9,8 @@ const AboutMe = () => {
 
     // Use a tiny version of the image for pixelated state
     const imageUrl = isPixelated
-        ? "src/assets/me-tiny.jpg"  // This should be a 16x16 or 32x32 version of your image
-        : "src/assets/me.jpg";      // Original high-res image
+        ? "/me-tiny.jpg"  // This should be a 16x16 or 32x32 version of your image
+        : "/me.jpg";      // Original high-res image
 
     return (
         <div className="p-4">
@@ -26,7 +26,7 @@ const AboutMe = () => {
                     <button onClick={togglePixelation}>
                         {isPixelated ? 'Click to enhance' : 'Click to pixelate'}
                     </button>
-                </div><br/>
+                </div><br /><br />
                 <p className="text-lg">Hello! I'm Will Sexton, a junior software engineer, passionate about code, infrastructure and design!</p>
                 <div className="bg-gray-100 p-4 rounded window-style">
                     <h4 className="font-bold mb-2">Skills</h4>
