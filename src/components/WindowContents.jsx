@@ -26,7 +26,7 @@ const AboutMe = () => {
                     <button onClick={togglePixelation}>
                         {isPixelated ? 'Click to enhance' : 'Click to pixelate'}
                     </button>
-                </div><br /><br />
+                </div><br /><br /><br />
                 <p className="text-lg">Hello! I'm Will Sexton, a junior software engineer, passionate about code, infrastructure and design!</p>
                 <div className="bg-gray-100 p-4 rounded window-style">
                     <h4 className="font-bold mb-2">Skills</h4>

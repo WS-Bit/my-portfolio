@@ -1,34 +1,34 @@
 import React, { useState, useCallback, useRef } from 'react';
 import Draggable from 'react-draggable';
-import '98.css';
+import MobileWindow from './MobileWindow';
 
 const Window = ({ title, children, onClose }) => {
     const [size, setSize] = useState({ width: 600, height: 500 });
     const [isResizing, setIsResizing] = useState(false);
     const [initialMousePosition, setInitialMousePosition] = useState({ x: 0, y: 0 });
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [isMobile] = useState(window.innerWidth <= 768);
     const [zIndex, setZIndex] = useState(1);
     const nodeRef = useRef(null);
 
+    if (isMobile) {
+        return <MobileWindow title={title} onClose={onClose}>{children}</MobileWindow>;
+    }
+
     // Calculate a random position within a reasonable area of the screen
     const getInitialPosition = () => {
-        const maxOffset = 300; // Maximum random offset
-        const baseX = 40; // Base X position from left
-        const baseY = -60; // Base Y position from top
-
+        // Each new window starts 20px offset from previous
+        const windowCount = document.querySelectorAll('.window').length;
         return {
-            x: baseX + Math.random() * maxOffset,
-            y: baseY + Math.random() * maxOffset
+            x: 200 + (windowCount * 20),
+            y: -100 + (windowCount * 20)
         };
     };
 
     const startResize = useCallback((e) => {
-        if (!isMobile) {
-            setIsResizing(true);
-            setInitialMousePosition({ x: e.clientX, y: e.clientY });
-            e.preventDefault();
-        }
-    }, [isMobile]);
+        setIsResizing(true);
+        setInitialMousePosition({ x: e.clientX, y: e.clientY });
+        e.preventDefault();
+    }, []);
 
     const stopResize = useCallback(() => {
         setIsResizing(false);
@@ -36,7 +36,7 @@ const Window = ({ title, children, onClose }) => {
 
     const resize = useCallback(
         (e) => {
-            if (isResizing && !isMobile) {
+            if (isResizing) {
                 const newWidth = size.width + (e.clientX - initialMousePosition.x);
                 const newHeight = size.height + (e.clientY - initialMousePosition.y);
                 setSize({
@@ -46,8 +46,18 @@ const Window = ({ title, children, onClose }) => {
                 setInitialMousePosition({ x: e.clientX, y: e.clientY });
             }
         },
-        [isResizing, size.width, size.height, initialMousePosition, isMobile]
+        [isResizing, size.width, size.height, initialMousePosition]
     );
+
+    const bringToFront = useCallback(() => {
+        const allWindows = document.querySelectorAll('.window');
+        let maxZ = 0;
+        allWindows.forEach(win => {
+            const z = parseInt(win.style.zIndex || '0');
+            maxZ = Math.max(maxZ, z);
+        });
+        setZIndex(maxZ + 1);
+    }, []);
 
     React.useEffect(() => {
         if (isResizing) {
@@ -59,16 +69,6 @@ const Window = ({ title, children, onClose }) => {
             window.removeEventListener('mouseup', stopResize);
         };
     }, [isResizing, resize, stopResize]);
-
-    const bringToFront = useCallback(() => {
-        const allWindows = document.querySelectorAll('.window');
-        let maxZ = 0;
-        allWindows.forEach(win => {
-            const z = parseInt(win.style.zIndex || '0');
-            maxZ = Math.max(maxZ, z);
-        });
-        setZIndex(maxZ + 1);
-    }, []);
 
     return (
         <Draggable
@@ -82,8 +82,8 @@ const Window = ({ title, children, onClose }) => {
                 ref={nodeRef}
                 className="window"
                 style={{
-                    width: isMobile ? '90vw' : `${size.width}px`,
-                    height: isMobile ? '80vh' : `${size.height}px`,
+                    width: `${size.width}px`,
+                    height: `${size.height}px`,
                     position: 'absolute',
                     zIndex: zIndex,
                 }}
@@ -95,18 +95,10 @@ const Window = ({ title, children, onClose }) => {
                         <button aria-label="Close" onClick={onClose}></button>
                     </div>
                 </div>
-                <div
-                    className="window-body"
-                    style={{
-                        overflow: 'auto',
-                        padding: '15px',
-                        height: 'calc(100% - 30px)',
-                        fontSize: isMobile ? '16px' : '18px'
-                    }}
-                >
+                <div className="window-body">
                     {children}
                 </div>
-                {!isMobile && <div className="resizer" onMouseDown={startResize} />}
+                <div className="resizer" onMouseDown={startResize} />
             </div>
         </Draggable>
     );
