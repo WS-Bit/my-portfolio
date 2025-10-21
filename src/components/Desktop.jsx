@@ -54,15 +54,6 @@ const Desktop = ({ children }) => {
                     <span>README.txt</span>
                 </div>
             </div>
-
-            {showEasterEgg && (
-                <div className="clippy-animation">
-                    <img src="/icons/clippy.png" alt="Clippy" />
-                    <div className="speech-bubble">
-                        "It looks like you're building a portfolio! Need help?"
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

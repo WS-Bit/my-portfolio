@@ -9,7 +9,7 @@ const AboutMe = () => {
 
     const imageUrl = isPixelated
         ? "/me-tiny.jpg"  
-        : "/me.jpg";  
+        : "/me.jpeg";  
 
     return (
         <div className="p-4">

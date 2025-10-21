@@ -14,9 +14,8 @@ const Window = ({ title, children, onClose }) => {
         return <MobileWindow title={title} onClose={onClose}>{children}</MobileWindow>;
     }
 
-    // Calculate a random position within a reasonable area of the screen
+    
     const getInitialPosition = () => {
-        // Each new window starts 20px offset from previous
         const windowCount = document.querySelectorAll('.window').length;
         return {
             x: 200 + (windowCount * 20),
