@@ -7,10 +7,9 @@ const AboutMe = () => {
         setIsPixelated(!isPixelated);
     };
 
-    // Use a tiny version of the image for pixelated state
     const imageUrl = isPixelated
-        ? "/me-tiny.jpg"  // This should be a 16x16 or 32x32 version of your image
-        : "/me.jpg";      // Original high-res image
+        ? "/me-tiny.jpg"  
+        : "/me.jpg";  
 
     return (
         <div className="p-4">
